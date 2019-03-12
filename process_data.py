@@ -6,11 +6,9 @@ parser = argparse.ArgumentParser()
 
 parser.add_argument("messages_database" )
 parser.add_argument("categories_database" )
-parser.add_argument("sql_path" default = 'sqlite:///Database.db')
-parser.add_argument("table_name" default='table1' )
+parser.add_argument("sql_path", default = 'sqlite:///Database.db')
+parser.add_argument("--table_name", default='table1' )
 args = parser.parse_args()
-
-data_dir = args.data_dir
 
 # load messages dataset
 messages = pd.read_csv(args.messages_database)
@@ -57,5 +55,5 @@ df = pd.concat([df, categories], axis=1, sort=False)
 df = df.drop_duplicates()
 
 # save to SQL
-engine = create_engine(args.sql_path)
+engine = create_engine('sqlite:///{}'.format(args.sql_path))
 df.to_sql(args.table_name, engine, index=False)
