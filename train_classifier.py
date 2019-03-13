@@ -20,13 +20,21 @@ from sklearn.model_selection import GridSearchCV
 import numpy as np
 import warnings
 import pickle
+import argparse
 
 nltk.download('punkt')
 nltk.download('stopwords')
 nltk.download('wordnet')
 
+parser = argparse.ArgumentParser()
+
+parser.add_argument("db_path" )
+parser.add_argument("model_path" )
+
+args = parser.parse_args()
+
 # load data from database
-engine = create_engine('sqlite:///InsertDatabaseName.db')
+engine = create_engine('sqlite:///{}'.format(args.db_path))
 df = pd.read_sql_table('InsertTableName', engine)
 categories = ['related', 'request', 'offer', 'aid_related', 'medical_help', 'medical_products', 'search_and_rescue', 'security', 'military', 'child_alone', 'water', 'food', 'shelter', 'clothing', 'money', 'missing_people', 'refugees', 'death', 'other_aid', 'infrastructure_related', 'transport', 'buildings', 'electricity', 'tools', 'hospitals', 'shops', 'aid_centers', 'other_infrastructure', 'weather_related', 'floods', 'storm', 'fire', 'earthquake', 'cold', 'other_weather', 'direct_report']
 X = df['message']
@@ -79,6 +87,6 @@ for cat in np.arange(0, 36):
         class_report = 'UndefinedMetricWarning'
     print ('Score for {}:\n{}'.format(categories[cat],class_report))
 
-pickle_file = open('model_save', 'wb')
+pickle_file = open(args.model_path, 'wb')
 pickle.dump(best, pickle_file)
 pickle_file.close()
