@@ -12,19 +12,17 @@ args = parser.parse_args()
 
 # load messages dataset
 messages = pd.read_csv(args.messages_database)
-messages.head()
 
 # load categories dataset
 categories = pd.read_csv(args.categories_database)
-categories.head()
 
 # merge datasets
 df = messages.merge(categories, on = 'id')
-df.head()
+
 
 # create a dataframe of the 36 individual category columns
 categories = df['categories'].str.split(';', expand=True)
-categories.head()
+
 
 # select the first row of the categories dataframe
 row = categories.iloc[0]
@@ -33,7 +31,6 @@ row = categories.iloc[0]
 # one way is to apply a lambda function that takes everything
 # up to the second to last character of each string with slicing
 category_colnames = [x[0] for x in row.str.split('-',n = 1)]
-print(category_colnames)
 
 # rename the columns of `categories`
 categories.columns = category_colnames
