@@ -43,6 +43,21 @@ Y = df[categories]
 url_regex = 'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+'
 
 def tokenize(text):
+    """
+    Clean a tokenize a string.
+
+    Take a string perform steps to prepare for tfidf. This is accomplished
+    by removing URLs, special characters, and spaces and using WordNetLemmatizer and
+    word_tokenize on it. This function is designed to perform these steps as part
+    of a pipeline.
+
+    Parameters:
+    text (str): Text to be processed
+
+    Returns:
+    cleaned_lemmed_list: A list of words ready for tfidf.
+
+    """
 
     urls = re.findall(url_regex, text)
     for url in urls:
