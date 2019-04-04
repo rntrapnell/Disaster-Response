@@ -6,16 +6,21 @@ What we have attempted to build here is a pipeline that can be trained on messag
 
 Files
 
-process_data.py An ETL pipeline that takes two CSVs files (messages and categories)
-                messages and prepares it to be used for training the classifier.
+process_data.py An ETL pipeline that takes two CSVs files (messages and categories)messages and prepares it to be used for training the classifier.
+
 train_classifier.py Takes a SQL db (usually one created by process_data.py) and uses it to train the classifier.
+
 run.py A web app that allows the user to input a message and receive back a category predicted by the classifier             
 
 Instructions
+
 The ETL pipeline is run from process_data.py and requires an input csv name as well as the name of an output sql db.
+
 Example:
 `python process_data.py disaster_messages.csv disaster_categories.csv DisasterResponse.db`
+
 The classifier is trained using train_classifier.py and requires an input sql db name (which is typically the output name above for process_data.py) and an output pickle (.pkl) file name(the web app only supports the name classifier.pkl so if you plan to use the web app you should name the pickle file accordingly).
+
 Example:
 `python train_classifier.py DisasterResponse.db classifier.pkl`
 
