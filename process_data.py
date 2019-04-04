@@ -46,7 +46,7 @@ for column in categories:
 df = df.drop(['categories'], axis = 1)
 
 # concatenate the original dataframe with the new `categories` dataframe
-df = pd.concat([df, categories], axis=1, sort=False)
+df = pd.concat([df, categories], axis=1)
 
 # drop duplicates
 df = df.drop_duplicates()
