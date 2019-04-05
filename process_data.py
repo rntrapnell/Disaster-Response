@@ -19,34 +19,37 @@ categories = pd.read_csv(args.categories_database)
 # merge datasets
 df = messages.merge(categories, on = 'id')
 
+def categories_to_columns(df):
+    '''Converts column with list of categories to columns of categoriesself.
 
-# create a dataframe of the 36 individual category columns
-categories = df['categories'].str.split(';', expand=True)
+    The original csv contains a list of categories with each category name followed
+    by -0 or -1 indicated whether the column is marked for the message in the row.
+    This function converts those lists into seperate columns (one for each category)
+    with 0's and 1's in order to prepare the data for machine learning techniques.
+
+    Parameters:
+    df - An unconverted dataframe
+
+    Returns:
+    df - The converted dataframe
+
+    '''
+    categories = df['categories'].str.split(';', expand=True)
+    row = categories.iloc[0]
+    category_colnames = [x[0] for x in row.str.split('-',n = 1)]
+    categories.columns = category_colnames
+
+    for column in categories:
+        categories[column] = [x[1] for x in categories[column].astype(str).str.split('-',n = 1)]
+        categories[column] = [int(x) for x in categories[column]]
 
 
-# select the first row of the categories dataframe
-row = categories.iloc[0]
+    df = df.drop(['categories'], axis = 1)
 
-# use this row to extract a list of new column names for categories.
-# one way is to apply a lambda function that takes everything
-# up to the second to last character of each string with slicing
-category_colnames = [x[0] for x in row.str.split('-',n = 1)]
-
-# rename the columns of `categories`
-categories.columns = category_colnames
-
-for column in categories:
-    # set each value to be the last character of the string
-    categories[column] = [x[1] for x in categories[column].astype(str).str.split('-',n = 1)]
-
-    # convert column from string to numeric
-    categories[column] = [int(x) for x in categories[column]]
-
-# drop the original categories column from `df`
-df = df.drop(['categories'], axis = 1)
-
-# concatenate the original dataframe with the new `categories` dataframe
-df = pd.concat([df, categories], axis=1)
+    df = pd.concat([df, categories], axis=1)
+    return(df)
+    
+df = categories_to_columns(df)
 
 # drop duplicates
 df = df.drop_duplicates()
