@@ -114,7 +114,7 @@ best_model, b_pred, y_test = run_GridSearch(X,Y,parameters)
 y_truth = y_test.values
 
 warnings.filterwarnings("error")
-for cat in np.arange(0, 36):
+for cat in np.arange(0, len(categories)):
     in_out = ['Not {}'.format(categories[cat]), '{}'.format(categories[cat])]
     try:
         class_report = classification_report(y_truth[cat], b_pred[cat],target_names = in_out)
